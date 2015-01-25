@@ -1,0 +1,9 @@
+
+build/
+dist/
+
+src/
+geometry.md
+gulpfile.coffee
+index.cirru
+index.html
