@@ -13,16 +13,21 @@ Meanwhile performance is not the first priority.
 This Spec is working in progress. Currently it contains these shapes:
 
 * Line
-* Path
 * Text
 * Arc
 * Image
 * Bezier
 * Quadratic
-* Shadow
+* Save
+* Restore
+* Alpha
+* Scale
+* Translate
+* Rotate
+* Clip
+* Path(not ready)
+* Shadow(not ready)
 * Gradient(not ready)
-* Transform(not ready)
-* Clip(not ready)
 
 ### Point
 
@@ -60,7 +65,6 @@ and expands to:
 map
   :type :line
   :base P
-  :from P
   :to P
   :color $ hsla 240 50 50 0.5
   :close #true
@@ -75,7 +79,6 @@ map
 map
   :type :line
   :base P
-  :from P
   :to P
   :color $ hsla 240 50 50 0.5
   :close #true
@@ -92,7 +95,6 @@ map
 ```cirru
 map
   :base P
-  :from P
   :text :demo
   :family :Optima
   :size 14
@@ -109,14 +111,12 @@ map
 map
   :type :arc
   :base P
-  :from P
   :radius 10
   :startAngle 30
   :endAngle 60
   -- anti is short for anticlockwise
   :anti #true
-  -- kind can be: fill stroke
-  :kind :fill
+  -- fill or stroke
   :fillStyle $ hsla 240 50 50 0.5
   :strokeStyle $ hsla 240 50 50 0.5
 ```
@@ -129,11 +129,9 @@ Rect is position from its center, so is different from canvas:
 map
   :type :rect
   :base P
-  :from P
   -- half of width and height
   :vector P
-  -- kind can be: fill clear stroke
-  :kind :fill
+  -- fill or stroke
   :fillStyle $ hsla 240 50 50 0.5
   :strokeStyle $ hsla 240 50 50 0.5
 ```
@@ -144,12 +142,19 @@ map
 map
   :type :image
   :base P
-  :from P
+  -- url of image
+  :src :url
   -- full size of desired image
-  :scaledVector P
-  -- to slice image
-  :sliceFrom P
-  :sliceVector P
+  :x 10
+  :y 10
+  :w 10
+  :h 10
+  -- from source image
+  :source $ map
+    :x 10
+    :y 10
+    :w 10
+    :h 10
 ```
 
 ### Bezier
@@ -160,7 +165,6 @@ Quadratic is written the same but with only 1 point in between:
 map
   :type :quadratic
   :base P
-  :from P
   :between $ array P P
   -- for quadratics, use a single point
   -- :between $ array P
@@ -172,8 +176,81 @@ map
 For shapes that have shadow, use this:
 
 ```cirru
-:shadow $ map
+map
+  :type :shadow
   :vector P
   :blur 2
   :color $ hsla 240 50 50 0.5
+```
+
+### Save
+
+Save canvas state:
+
+```cirru
+map
+  :type :save
+```
+
+### Restore
+
+Restore canvas state:
+
+```cirru
+map
+  :type :restore
+```
+
+### Alpha
+
+```cirru
+map
+  :type :alpha
+  :value 0.5
+```
+
+### Translate
+
+```cirru
+map
+  :type :translate
+  :x 1
+  :y 1
+```
+
+### Rotate
+
+```cirru
+map
+  :type :rotate
+  :angle 30
+```
+
+### Scale
+
+```cirru
+map
+  :type :scale
+  :x 2
+  :y 2
+```
+
+### Transform
+
+```cirru
+map
+  :type :transform
+  :x $ array 0.5 0.5 1
+  :y $ array 0.5 0.5 1
+```
+
+### Clip
+
+```cirru
+map
+  :type :clip
+  :x 10
+  :y 10
+  :w 10
+  :h 10
 ```
